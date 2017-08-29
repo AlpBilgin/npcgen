@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="masthead">
+    <h1>NPC ÜRETECİ</h1>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #userListForm="ngForm">
+    <div class="row">
+      <div class="col-6">
+        <label for="CRInput" class="col-3 col-form-label"><strong>CR:</strong></label>
+      </div>
+      <div class="col">
+        <input [(ngModel)]="cr" name="CRInput" class="form-control" type="number" id="CRInput">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label for="CRInput" class="col-3 col-form-label"><strong>Sınıf:</strong></label>
+      </div>
+      <div class="col">
+        <select [(ngModel)]="charClass" class="form-control" name="charClassDropdown">
+            <option *ngFor="let class of classList | enum" [ngValue]="class.key">{{class.value}}</option>
+          </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label for="CRInput" class="col-3 col-form-label"><strong>Irk:</strong></label>
+      </div>
+      <div class="col">
+        <select [(ngModel)]="charRace" class="form-control" name="charRaceDropdown">
+            <option *ngFor="let race of raceList | enum" [ngValue]="race.key">{{race.value}}</option>
+          </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success ">ÜRET!</button>
+  </form>
+
+  <hr />
+  <div class="summary" *ngIf="submitted">
+    <div class="row">
+      <h4 class="col">
+        {{name}}
+      </h4>
+    </div>
+  </div>
+
+
+</div>
