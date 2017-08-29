@@ -1,1 +1,8 @@
-export enum Class { kaslı = 0, fırlama = 1, şerefsiz = 2 }
+import { stat } from './stat';
+
+export enum CharClassEnum { kaslı, fırlama, şerefsiz }
+
+export class CharClass {
+    className: string;
+    abilitiyPriorities: stat[];
+}

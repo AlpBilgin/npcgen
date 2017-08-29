@@ -1,1 +1,8 @@
-export enum Race { dwarf = 0, elf = 1, öcü = 2, böcü = 3 }
+import { stat, StatBonus } from './stat';
+
+export enum RaceEnum { dwarf, elf, öcü, böcü }
+
+export class CharRace {
+    bonusStat: StatBonus[];
+    trait: string[];
+}
