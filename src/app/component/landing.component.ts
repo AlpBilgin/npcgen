@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, AbstractControl } from '@angular/forms';
 
-import { Class } from '../model/class';
-import { Race } from '../model/race';
+import { CharClassEnum } from '../model/class';
+import { RaceEnum, CharRace } from '../model/race';
 import { EnumPipe } from '../pipe/enum.pipe';
 
 import { stat } from '../model/stat';
 // import { CR } from '../model/crs';
+
+import { RaceService } from '../service/race.service';
 
 
 
@@ -23,8 +25,8 @@ export class LandingComponent implements OnInit {
   charClass = 0;
   charRace = 0;
 
-  classList = Class;
-  raceList = Race;
+  classList = CharClassEnum;
+  raceList = RaceEnum;
 
   submitted = false;
 
@@ -37,27 +39,21 @@ export class LandingComponent implements OnInit {
   abilityModifiers: number[] = Array<number>();
 
   constructor(
+    private raceService: RaceService
   ) {
   }
 
   ngOnInit() {
     // stat öncelikleri
-    // sınıfın kendi numarası üst liste numarası
-    // stat öncelik sırası alt liste numarası
-    // stat numaraları elementler.
+    // soldaki daha öncelikli
     this.abilityPriorities = [
-      [0, 2, 4, 1, 5, 3],
-      [1, 3, 5, 4, 0, 2],
-      [3, 5, 1, 2, 0, 4]
+      [stat.str, stat.con, stat.wis, stat.dex, stat.cha, stat.int], // 0 numarali sinif
+      [stat.dex, stat.int, stat.cha, stat.wis, stat.str, stat.con], // 1 nuamrali sinif
+      [stat.int, stat.cha, stat.dex, stat.con, stat.str, stat.wis]  // 2 numarali sinif
     ];
 
-    // Bu listeler str->cha sıralamasına göre
-    this.racialBonuses = [
-      [0, 0, 2, 0, 0, 0],
-      [0, 2, 0, 0, 0, 0],
-      [0, 0, 0, 1, 0, 1],
-      [1, 0, 0, 0, 1, 0]
-    ];
+    console.log(this.raceService.getRaces());
+
   }
 
   onSubmit() {
