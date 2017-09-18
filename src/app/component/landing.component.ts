@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, AbstractControl } from '@angular/forms';
 
-import { CharClassEnum } from '../model/class';
-import { RaceEnum, CharRace } from '../model/race';
+import { CharClass, } from '../model/class';
+import { CharRace } from '../model/race';
 import { EnumPipe } from '../pipe/enum.pipe';
-
-import { stat } from '../model/stat';
-// import { CR } from '../model/crs';
-
-import { RaceService } from '../service/race.service';
+import { AbilityScores, AbilityScoreBonus } from '../model/abilityScore';
+import { CR } from '../model/crs';
 
 
 
@@ -22,52 +19,37 @@ import { RaceService } from '../service/race.service';
 export class LandingComponent implements OnInit {
 
   cr = 0;
-  charClass = 0;
-  charRace = 0;
+  charClass: CharClass;
+  charRace: CharRace;
 
-  classList = CharClassEnum;
-  raceList = RaceEnum;
+  classList: CharClass[];
+  raceList: CharRace[];
 
   submitted = false;
 
-  name = '';
-
-  abilityPriorities;
-  racialBonuses;
+  charName = '';
 
   abilities: number[] = Array<number>();
-  abilityModifiers: number[] = Array<number>();
 
   constructor(
-    private raceService: RaceService
   ) {
   }
 
   ngOnInit() {
-    // stat öncelikleri
-    // soldaki daha öncelikli
-    this.abilityPriorities = [
-      [stat.str, stat.con, stat.wis, stat.dex, stat.cha, stat.int], // 0 numarali sinif
-      [stat.dex, stat.int, stat.cha, stat.wis, stat.str, stat.con], // 1 nuamrali sinif
-      [stat.int, stat.cha, stat.dex, stat.con, stat.str, stat.wis]  // 2 numarali sinif
-    ];
-
-    console.log(this.raceService.getRaces());
-
+    // TODO fetch class list
+    // TODO fetch race list
   }
 
   onSubmit() {
     this.submitted = true;
-    this.name = 'İSİM';
+    this.charName = 'İSİM';
 
-    const racialBonus = this.racialBonuses[this.charRace];
-    const abilityPriority = this.abilityPriorities[this.charClass];
-
-
+    // Produce 6 3d6 numbers
     for (let i = 0; i < 5; i++) {
       const stat = Math.floor((Math.random() * 15) + 3);
       this.abilities.push(stat);
     }
+    // Sort stat array by numeric magnitude
     this.abilities.sort(
       (a, b) => {
         if (a < b) { return 1; }
@@ -75,12 +57,7 @@ export class LandingComponent implements OnInit {
         return 0;
       }
     );
-    // ırksalda +2den fazla gelmiyor onu kontrol etmeye gerek yok.
-    for (let i = 0; i < 5; i++) {
-      // Öncelik tablosu içinden hangi statın önem sırasının geldiğini tespit et. O sayıyı kullanarak ırk bonusu tablosundan bonusu bul.
-      // Bonusu zar sonucuna ekle
-      this.abilities[i] = this.abilities[i] + racialBonus[this.abilityPriorities[i]];
-    }
+    // Racial bonuses can't be greater than 2 no need to check for 20 ability cap here.
     // CRden ability bonus alınacaksa en baştan 20ye tamamlayacak şekilde paylaştırılır.
 
     console.log(this.abilities);

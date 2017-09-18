@@ -1,8 +1,10 @@
-import { stat } from './stat';
-
-export enum CharClassEnum { kaslı, fırlama, şerefsiz }
+import { AbilityScores } from './abilityScore';
+import { Dice } from './dice';
+import { Action } from './action';
 
 export class CharClass {
-    className: string;
-    abilitiyPriorities: stat[];
+    public className: string;
+    public classStatPriorities: AbilityScores[];
+    public classHitDie: Dice;
+    public classActions: Action[];
 }
