@@ -9,7 +9,9 @@
         <label for="CRInput" class="col-3 col-form-label"><strong>CR:</strong></label>
       </div>
       <div class="col">
-        <input [(ngModel)]="cr" name="CRInput" class="form-control" type="number" id="CRInput">
+        <select [(ngModel)]="cr" class="form-control" name="crDropdown">
+            <option *ngFor="let cr of CRList" [ngValue]="cr">{{cr.cr}}</option>
+          </select>
       </div>
     </div>
     <div class="row">
@@ -18,7 +20,7 @@
       </div>
       <div class="col">
         <select [(ngModel)]="charClass" class="form-control" name="charClassDropdown">
-            <option *ngFor="let class of classList | enum" [ngValue]="class.key">{{class.value}}</option>
+            <option *ngFor="let class of classList" [ngValue]="class">{{class.className}}</option>
           </select>
       </div>
     </div>
@@ -28,7 +30,7 @@
       </div>
       <div class="col">
         <select [(ngModel)]="charRace" class="form-control" name="charRaceDropdown">
-            <option *ngFor="let race of raceList | enum" [ngValue]="race.key">{{race.value}}</option>
+            <option *ngFor="let race of raceList" [ngValue]="race">{{race.raceName}}</option>
           </select>
       </div>
     </div>
@@ -39,7 +41,7 @@
   <div class="summary" *ngIf="submitted">
     <div class="row">
       <h4 class="col">
-        {{name}}
+        {{this.CharAbilities.toString()}}
       </h4>
     </div>
   </div>

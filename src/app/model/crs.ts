@@ -1,4 +1,5 @@
 export class CR {
+    cr: number;
     profBonus: number;
     armorclassBonus: number;
     abilityBonus: number;
