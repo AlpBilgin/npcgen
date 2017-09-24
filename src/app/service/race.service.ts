@@ -1,33 +1,31 @@
 import { Injectable } from '@angular/core';
-import { StatBonus } from '../model/stat';
+import { AbilityScoreBonus, AbilityScores } from '../model/abilityScore';
 import { CharRace } from '../model/race';
+import { ActionType } from '../model/action';
+import { Dice } from '../model/dice';
 
 @Injectable()
 export class RaceService {
 
     // Bütün ırk tanımlarını saklayacak vektörü tanımla
-    races: CharRace[];
+    races: CharRace[] = Array<CharRace>();
 
     constructor() {
-        // bir Irk için stat bonuslarını tutacak vektörü tanımla
-        const bonuses = Array<StatBonus>();
-        // bir (veya iki) stat bonusu tanımla
-        const bonus: StatBonus = { statName: 'con', statBonus: 2 };
-        // bonusu vektöre kaydet
-        bonuses.push(bonus);
-
-        // aynı ırk için traitleri tutacak vektörü tanımla
-        const traits = Array<string>();
-        // traitleri vektöre kaydet
-        traits.push('trait 1');
-        traits.push('trait 2');
-
-        // Vektörleri kullanarak ırk tanımla
-        const ırk: CharRace = { bonusStat: bonuses, trait: traits };
+        // Elle ırk tanımla
+        const ırk: CharRace = {
+            raceName: 'asd',
+            traits: ['547637', '3736'],
+            action: {
+                actionType: ActionType.rolled,
+                actionStat: AbilityScores.str,
+                actionDice: { count: 1, face: 10 } as Dice,
+                actionText: 'vücut vuruşu'
+            },
+            abilityScoreBonuses: [{ abilityScore: AbilityScores.dex, abilityScoreBonus: 2 } as AbilityScoreBonus],
+        };
         // Irkı vektöre itele
         this.races.push(ırk);
     }
-
     public getRaces(): CharRace[] {
         return this.races;
     }
