@@ -6,37 +6,67 @@
   <form (ngSubmit)="onSubmit()" #userListForm="ngForm">
     <div class="row">
       <div class="col-6">
-        <label for="CRInput" class="col-3 col-form-label"><strong>CR:</strong></label>
+        <label for="CRInput" class="col-3 col-form-label">
+          <strong>CR:</strong>
+        </label>
       </div>
       <div class="col">
-        <select [(ngModel)]="cr" class="form-control" name="crDropdown">
-            <option *ngFor="let cr of CRList" [ngValue]="cr">{{cr.cr}}</option>
-          </select>
+        <select [(ngModel)]="charCR" class="form-control" name="crDropdown">
+          <option *ngFor="let cr of CRList" [ngValue]="cr">{{cr.cr}}</option>
+        </select>
       </div>
     </div>
     <div class="row">
       <div class="col-6">
-        <label for="CRInput" class="col-3 col-form-label"><strong>Sınıf:</strong></label>
+        <label for="CRInput" class="col-3 col-form-label">
+          <strong>Sınıf:</strong>
+        </label>
       </div>
       <div class="col">
         <select [(ngModel)]="charClass" class="form-control" name="charClassDropdown">
-            <option *ngFor="let class of classList" [ngValue]="class">{{class.className}}</option>
-          </select>
+          <option *ngFor="let class of classList" [ngValue]="class">{{class.className}}</option>
+        </select>
       </div>
     </div>
     <div class="row">
       <div class="col-6">
-        <label for="CRInput" class="col-3 col-form-label"><strong>Irk:</strong></label>
+        <label for="CRInput" class="col-3 col-form-label">
+          <strong>Irk:</strong>
+        </label>
       </div>
       <div class="col">
-        <select [(ngModel)]="charRace" class="form-control" name="charRaceDropdown">
-            <option *ngFor="let race of raceList" [ngValue]="race">{{race.raceName}}</option>
-          </select>
+        <select [(ngModel)]="raceSelection" (ngModelChange)="fetchRace()" class="form-control" name="charRaceDropdown">
+          <option *ngFor="let race of raceList" [ngValue]="race.ID">{{race.NAME}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" *ngIf="charRace&&showRace">
+      <div>
+        <button (click)="showRace=false;" type="button" class="btn btn-danger">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div>
+        {{charRace.raceName}}
+      </div>
+      <div>
+        {{charRace.abilityScoreBonuses[0].abilityScore|ability}}: {{charRace.abilityScoreBonuses[0].abilityScoreBonus}}
+      </div>
+      <div *ngIf="charRace.abilityScoreBonuses[1].abilityScoreBonus !== 0">
+        {{charRace.abilityScoreBonuses[1].abilityScore|ability}}: {{charRace.abilityScoreBonuses[1].abilityScoreBonus}}
+      </div>
+      <div>
+        {{charRace.action.actionName}}: {{charRace.action.actionContent}}
+      </div>
+      <div>
+        {{charRace.traits[0].traitName}}: {{charRace.traits[0].traitContent}}
+      </div>
+      <div>
+        {{charRace.traits[1].traitName}}: {{charRace.traits[1].traitContent}}
       </div>
     </div>
     <button type="submit" class="btn btn-success ">ÜRET!</button>
   </form>
-
   <hr />
   <div class="summary" *ngIf="submitted">
     <div class="row">
