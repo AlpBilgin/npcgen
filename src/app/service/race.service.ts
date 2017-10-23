@@ -1,32 +1,67 @@
 import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { AbilityScoreBonus, AbilityScores } from '../model/abilityScore';
-import { CharRace } from '../model/race';
-import { ActionType } from '../model/action';
+import { CharRace, CharRaceSummary } from '../model/race';
+import { ActionType, Action } from '../model/action';
 import { Dice } from '../model/dice';
+import { ActionService } from './action.service';
+import { TraitService } from './trait.service';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class RaceService {
+    baseURL = 'http://smubcizgiroman.com/api.php/RACES';
 
     // Bütün ırk tanımlarını saklayacak vektörü tanımla
-    races: CharRace[] = Array<CharRace>();
+    race: CharRace;
+    races: CharRaceSummary[] = Array<CharRaceSummary>();
+    raceCache: CharRace[] = Array<CharRace>();
 
-    constructor() {
-        // Elle ırk tanımla
-        const ırk: CharRace = {
-            raceName: 'asd',
-            traits: ['547637', '3736'],
-            action: {
-                actionType: ActionType.rolled,
-                actionStat: AbilityScores.str,
-                actionDice: { count: 1, face: 10 } as Dice,
-                actionText: 'vücut vuruşu'
+    constructor(
+        private http: Http,
+        private actionService: ActionService,
+        private traitService: TraitService
+    ) { }
+
+    // HTTP call returns names and primary keys.
+    // Response JSON is not an array because first row deletion will cause non-continuous primary keys.
+    // Here anon objects are unpacked from response JSON object and pushed into a returned array.
+    // For trivial case returned array index and race id will be duplicate, but do not be fooled!
+    public getRaces(): CharRaceSummary[] {
+        // get only name and id columns
+        this.http.get(this.baseURL).subscribe(
+            (next: Response) => {
+                console.log(next.json());
+                for (const key in next.json()) {
+                    // Iterate list and collect names from object and push into array
+                    this.races.push(next.json()[key]);
+                }
+                console.log(this.races);
             },
-            abilityScoreBonuses: [{ abilityScore: AbilityScores.dex, abilityScoreBonus: 2 } as AbilityScoreBonus],
-        };
-        // Irkı vektöre itele
-        this.races.push(ırk);
-    }
-    public getRaces(): CharRace[] {
+            err => console.log(err),
+            () => console.log('bitti')
+        );
         return this.races;
+    }
+
+    // Function caches each fetched race
+    public getRace(id: number): Promise<CharRace> {
+        // Search for race id in cache array, return if found
+        if (this.raceCache[id]) {
+            return new Promise(
+                (resolve, reject) => { resolve(this.raceCache[id]); }
+            );
+        }
+        // If race can't be found in cache; download, cache and return
+        return this.http.get(this.baseURL + '?' + id).toPromise().then(
+            (resp) => {
+                console.log(resp.json());
+                const raceDB = resp.json();
+                const newRace = new CharRace(raceDB);
+                this.raceCache[id] = newRace;
+                return newRace;
+            }
+        );
     }
 }
