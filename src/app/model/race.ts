@@ -15,14 +15,14 @@ export class CharRace {
     traits: Trait[];
     action: Action;
     abilityScoreBonuses: AbilityScoreBonus[];
-    constructor(charRace: any) {
-        this.raceName = charRace.NAME;
+    constructor(dbModel: any) {
+        this.raceName = dbModel.NAME;
         this.traits = new Array<Trait>();
-        this.traits.push(new Trait(charRace.TRAIT1));
-        this.traits.push(new Trait(charRace.TRAIT2));
-        this.action = new Action(charRace.ACTION);
+        this.traits.push(new Trait(dbModel.TRAIT1));
+        this.traits.push(new Trait(dbModel.TRAIT2));
+        this.action = new Action(dbModel.ACTION);
         this.abilityScoreBonuses = new Array<AbilityScoreBonus>();
-        this.abilityScoreBonuses.push(new AbilityScoreBonus(charRace.ABILITY_BONUS1));
-        this.abilityScoreBonuses.push(new AbilityScoreBonus(charRace.ABILITY_BONUS2));
+        this.abilityScoreBonuses.push(new AbilityScoreBonus(dbModel.ABILITY_BONUS1));
+        this.abilityScoreBonuses.push(new AbilityScoreBonus(dbModel.ABILITY_BONUS2));
     }
 }

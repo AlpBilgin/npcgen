@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { AbilityScoreBonus, AbilityScores } from '../model/abilityScore';
 import { CharRace, CharRaceSummary } from '../model/race';
-import { ActionType, Action } from '../model/action';
-import { Dice } from '../model/dice';
-import { ActionService } from './action.service';
-import { TraitService } from './trait.service';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -20,29 +14,25 @@ export class RaceService {
 
     constructor(
         private http: Http,
-        private actionService: ActionService,
-        private traitService: TraitService
     ) { }
 
     // HTTP call returns names and primary keys.
     // Response JSON is not an array because first row deletion will cause non-continuous primary keys.
     // Here anon objects are unpacked from response JSON object and pushed into a returned array.
     // For trivial case returned array index and race id will be duplicate, but do not be fooled!
-    public getRaces(): CharRaceSummary[] {
+    public getRaces(): Promise<CharRaceSummary[]> {
         // get only name and id columns
-        this.http.get(this.baseURL).subscribe(
-            (next: Response) => {
-                console.log(next.json());
-                for (const key in next.json()) {
+        return this.http.get(this.baseURL).toPromise().then(
+            (resp: Response) => {
+                console.log(resp.json());
+                for (const key in resp.json()) {
                     // Iterate list and collect names from object and push into array
-                    this.races.push(next.json()[key]);
+                    this.races.push(resp.json()[key]);
                 }
                 console.log(this.races);
-            },
-            err => console.log(err),
-            () => console.log('bitti')
+                return this.races;
+            }
         );
-        return this.races;
     }
 
     // Function caches each fetched race
@@ -55,7 +45,7 @@ export class RaceService {
         }
         // If race can't be found in cache; download, cache and return
         return this.http.get(this.baseURL + '?' + id).toPromise().then(
-            (resp) => {
+            (resp: Response) => {
                 console.log(resp.json());
                 const raceDB = resp.json();
                 const newRace = new CharRace(raceDB);
