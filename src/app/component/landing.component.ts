@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, AbstractControl } from '@angular/forms';
 
-import { CharClass } from '../model/class';
+import { CharClass, CharClassSummary } from '../model/class';
 import { CharRace, CharRaceSummary } from '../model/race';
 import { EnumPipe } from '../pipe/enum.pipe';
 import { AbilityScores, AbilityScoreBonus } from '../model/abilityScore';
-import { CR } from '../model/crs';
+import { CR, CharCRSummary } from '../model/crs';
 import { Action } from '../model/action';
 import { Character } from '../model/character';
 import { Dice } from '../model/dice';
@@ -25,10 +25,10 @@ import { CRService } from '../service/cr.service';
 export class LandingComponent implements OnInit {
   // Form state
   // Fetched data will be stored here
-  classList: CharClass[] = Array<CharClass>();
+  classList: CharClassSummary[] = Array<CharClassSummary>();
   raceList: CharRaceSummary[] = Array<CharRaceSummary>();
 
-  CRList: CR[] = Array<CR>();
+  CRList: CharCRSummary[] = Array<CharCRSummary>();
   // internal data
   raceSelection = 0;
   submitted = false;
@@ -43,9 +43,6 @@ export class LandingComponent implements OnInit {
   charCR: CR;
   charClass: CharClass;
   charRace: CharRace = null;
-  CharAbilities: number[] = Array<number>();
-  charActions: Action[] = Array<Action>();
-  charTraits: string[] = Array<string>();
 
   dummy;
 
@@ -55,12 +52,12 @@ export class LandingComponent implements OnInit {
     private crService: CRService,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     // TODO fetch class list
     // TODO fetch race list
-    this.classList = this.classService.getClasses();
-    this.raceList = this.raceService.getRaces();
-    this.CRList = this.crService.getCR();
+    this.classList = await this.classService.getClasses();
+    this.raceList = await this.raceService.getRaces();
+    this.CRList = await this.crService.getCRs();
   }
 
   async fetchRace() {
@@ -72,8 +69,6 @@ export class LandingComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.CharAbilities = Array<number>();
-
     this.submitted = true;
     this.character.name = 'İSİM!';
 

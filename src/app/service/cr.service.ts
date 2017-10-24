@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { CR } from '../model/crs';
+import { Http, Response } from '@angular/http';
+import { CR, CharCRSummary } from '../model/crs';
 
 @Injectable()
 export class CRService {
@@ -8,24 +8,47 @@ export class CRService {
     baseURL = 'http://smubcizgiroman.com/api.php/CHALLENGE_RATINGS';
 
     // Bütün sınıf tanımlarını saklayacak vektörü tanımla
-    CRs: CR[] = Array<CR>();
+    CR: CR;
+    CRs: CharCRSummary[] = Array<CharCRSummary>();
+    CRCache: CR[] = Array<CR>();
 
     constructor(
         private http: Http
-    ) {
-        // Elle sınıf tanımla
-        this.CRs.push({ cr: 1, profBonus: 2, armorclassBonus: 0, abilityBonus: 0, damage: '1d6', hitdiceCount: 2 } as CR);
-        this.CRs.push({ cr: 2, profBonus: 2, armorclassBonus: 0, abilityBonus: 5, damage: '1d6', hitdiceCount: 3 } as CR);
+    ) { }
+
+    public getCRs(): Promise<CharCRSummary[]> {
+        // get only name and id columns
+        return this.http.get(this.baseURL).toPromise().then(
+            (resp: Response) => {
+                console.log(resp.json());
+                for (const key in resp.json()) {
+                    // Iterate list and collect names from object and push into array
+                    this.CRs.push(resp.json()[key]);
+                }
+                console.log(this.CRs);
+                return this.CRs;
+            }
+        );
+
     }
 
-    public getCR(): any {
-        let res;
-        this.http.get(this.baseURL).subscribe(
-            next => console.log(next),
-            err => console.log(err),
-            () => console.log('bitti')
+    public getCR(id: number): Promise<CR> {
+        // Search for race id in cache array, return if found
+        if (this.CRCache[id]) {
+            return new Promise(
+                (resolve, reject) => { resolve(this.CRCache[id]); }
+            );
+        }
+
+        // If race can't be found in cache; download, cache and return
+        return this.http.get(this.baseURL + '?' + id).toPromise().then(
+            (resp: Response) => {
+                console.log(resp.json());
+                const raceDB = resp.json();
+                const newCR = new CR(raceDB);
+                this.CRCache[id] = newCR;
+                return newCR;
+            }
         );
-        res = 0;
-        return res;
     }
 }

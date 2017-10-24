@@ -1,3 +1,12 @@
+export class CharCRSummary {
+    ID: number;
+    NAME: string;
+    constructor(dbModel: any) {
+        this.ID = dbModel.ID;
+        this.NAME = dbModel.NAME;
+    }
+}
+
 export class CR {
     cr: number;
     profBonus: number;
@@ -5,4 +14,13 @@ export class CR {
     abilityBonus: number;
     damage: string;
     hitdiceCount: number;
+    constructor(dbModel: any) {
+        this.cr = dbModel.NAME;
+        this.profBonus = dbModel.PROF_BONUS;
+        this.armorclassBonus = dbModel.AC_BONUS;
+        this.abilityBonus = dbModel.ABILITY_BONUS;
+        // TODO fix this when backend is finalised
+        this.damage = dbModel.DMG_DIE;
+        this.hitdiceCount = dbModel.HD_COUNT;
+    }
 }

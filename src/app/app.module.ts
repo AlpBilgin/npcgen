@@ -7,8 +7,6 @@ import { LandingComponent } from './component/landing.component';
 
 import { ClassService } from './service/class.service';
 import { RaceService } from './service/race.service';
-import { ActionService } from './service/action.service';
-import { TraitService } from './service/trait.service';
 
 import { CRService } from './service/cr.service';
 import { EnumPipe } from './pipe/enum.pipe';
@@ -30,8 +28,6 @@ import { AbilityPipe } from './pipe/ability.pipe';
     RaceService,
     CRService,
     ClassService,
-    ActionService,
-    TraitService,
   ],
   bootstrap: [LandingComponent]
 })
