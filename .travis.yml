@@ -4,4 +4,4 @@ node_js:
   - "iojs"
   - "8"
   - "7"
-  script: npm test
+script: npm test
