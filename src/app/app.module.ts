@@ -19,12 +19,11 @@ import { AbilityPipe } from './pipe/ability.pipe';
     HttpModule,
   ],
   declarations: [
-    LandingComponent,
-    EnumPipe,
-    AbilityPipe,
+    LandingComponent
   ],
   providers: [
     EnumPipe,
+    AbilityPipe,
     RaceService,
     CRService,
     ClassService,

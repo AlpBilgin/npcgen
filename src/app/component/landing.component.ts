@@ -3,7 +3,6 @@ import { NgForm, AbstractControl } from '@angular/forms';
 
 import { CharClass, CharClassSummary } from '../model/class';
 import { CharRace, CharRaceSummary } from '../model/race';
-import { EnumPipe } from '../pipe/enum.pipe';
 import { AbilityScores, AbilityScoreBonus } from '../model/abilityScore';
 import { CR, CharCRSummary } from '../model/crs';
 import { Action } from '../model/action';
@@ -20,7 +19,6 @@ import { CRService } from '../service/cr.service';
   moduleId: module.id,
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],
-  providers: [EnumPipe],
 })
 export class LandingComponent implements OnInit {
   // Form state
