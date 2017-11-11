@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { CharRace, CharRaceSummary } from '../model/race';
+import { environment } from '../env';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class RaceService {
-    baseURL = 'http://smubcizgiroman.com/api.php/RACES';
+    baseURL = environment.baseURL + '/RACES';
 
     // Bütün ırk tanımlarını saklayacak vektörü tanımla
     race: CharRace;
@@ -24,12 +25,12 @@ export class RaceService {
         // get only name and id columns
         return this.http.get(this.baseURL).toPromise().then(
             (resp: Response) => {
-                console.log(resp.json());
+                // console.log(resp.json());
                 for (const key in resp.json()) {
                     // Iterate list and collect names from object and push into array
                     this.races.push(resp.json()[key]);
                 }
-                console.log(this.races);
+                // console.log(this.races);
                 return this.races;
             }
         );
@@ -46,7 +47,7 @@ export class RaceService {
         // If race can't be found in cache; download, cache and return
         return this.http.get(this.baseURL + '?' + id).toPromise().then(
             (resp: Response) => {
-                console.log(resp.json());
+                // console.log(resp.json());
                 const raceDB = resp.json();
                 const newRace = new CharRace(raceDB);
                 this.raceCache[id] = newRace;

@@ -18,11 +18,11 @@ export class CharRace {
     constructor(dbModel: any) {
         this.raceName = dbModel.NAME;
         this.traits = new Array<Trait>();
-        this.traits.push(new Trait(dbModel.TRAIT1));
-        this.traits.push(new Trait(dbModel.TRAIT2));
-        this.action = new Action(dbModel.ACTION);
+        this.traits.push(new Trait({ NAME: dbModel.T1NAME, CONTENT: dbModel.T1CONTENT }));
+        this.traits.push(new Trait({ NAME: dbModel.T2NAME, CONTENT: dbModel.T2CONTENT }));
+        this.action = new Action({ NAME: dbModel.ANAME, CONTENT: dbModel.ACONTENT });
         this.abilityScoreBonuses = new Array<AbilityScoreBonus>();
-        this.abilityScoreBonuses.push(new AbilityScoreBonus(dbModel.ABILITY_BONUS1));
-        this.abilityScoreBonuses.push(new AbilityScoreBonus(dbModel.ABILITY_BONUS2));
+        this.abilityScoreBonuses.push(new AbilityScoreBonus({ ABILITY: dbModel.AB1ABILITY, BONUS: dbModel.AB1BONUS }));
+        this.abilityScoreBonuses.push(new AbilityScoreBonus({ ABILITY: dbModel.AB2ABILITY, BONUS: dbModel.AB2BONUS }));
     }
 }

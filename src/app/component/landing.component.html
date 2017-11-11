@@ -11,10 +11,33 @@
         </label>
       </div>
       <div class="col">
-        <select [(ngModel)]="charCR" class="form-control" name="crDropdown">
-          <option *ngFor="let cr of CRList" [ngValue]="cr">{{cr.cr}}</option>
+        <select [(ngModel)]="crSelection" (ngModelChange)="fetchCR()" class="form-control" name="crDropdown">
+          <option *ngFor="let cr of CRList" [ngValue]="cr.ID">{{cr.NAME}}</option>
         </select>
+
       </div>
+      <div class="col-2">
+        <button (click)="toggleCR()" type="button" class="btn">
+          <span *ngIf="!showCR">show</span>
+          <span *ngIf="showCR">hide</span>
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="charCR&&showCR">
+      <dl>
+        <dt> CR: </dt>
+        <dd> {{charCR.cr}} </dd>
+        <dt> Prof. Bonus: </dt>
+        <dd> {{charCR.profBonus}} </dd>
+        <dt> AC Bonus: </dt>
+        <dd> {{charCR.armorclassBonus}} </dd>
+        <dt> Ability Score Bonus: </dt>
+        <dd> {{charCR.abilityBonus}} </dd>
+        <dt> Damage: </dt>
+        <dd> {{charCR.damage}} </dd>
+        <dt> HD: </dt>
+        <dd> {{charCR.hitdiceCount}} </dd>
+      </dl>
     </div>
     <div class="row">
       <div class="col-6">
@@ -23,10 +46,32 @@
         </label>
       </div>
       <div class="col">
-        <select [(ngModel)]="charClass" class="form-control" name="charClassDropdown">
-          <option *ngFor="let class of classList" [ngValue]="class">{{class.className}}</option>
+        <select [(ngModel)]="classSelection" (ngModelChange)="fetchClass()" class="form-control" name="charClassDropdown">
+          <option *ngFor="let class of classList" [ngValue]="class.ID">{{class.NAME}}</option>
         </select>
       </div>
+      <div class="col-2">
+        <button (click)="toggleClass()" type="button" class="btn">
+          <span *ngIf="!showClass">show</span>
+          <span *ngIf="showClass">hide</span>
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="charClass&&showClass">
+      <dl>
+        <dt> Class Name: </dt>
+        <dd> {{charClass.className}} </dd>
+        <dt> Class HD: </dt>
+        <dd> {{charClass.classHitDie.count}}d{{charClass.classHitDie.face}} </dd>
+        <dt> Ability Score Priorities: </dt>
+        <dd>
+          <span *ngFor="let ability of charClass.classStatPriorities">{{ability|ability}}</span>
+        </dd>
+        <dt>Class Actions:</dt>
+        <dd *ngFor="let action of charClass.classActions">
+          {{action.actionName}}: {{action.actionContent}}
+        </dd>
+      </dl>
     </div>
     <div class="row">
       <div class="col-6">
@@ -39,31 +84,34 @@
           <option *ngFor="let race of raceList" [ngValue]="race.ID">{{race.NAME}}</option>
         </select>
       </div>
-    </div>
-    <div class="row" *ngIf="charRace&&showRace">
-      <div>
-        <button (click)="showRace=false;" type="button" class="btn btn-danger">
-          <i class="fa fa-times" aria-hidden="true"></i>
+      <div class="col-2">
+        <button (click)="toggleRace()" type="button" class="btn">
+          <span *ngIf="!showRace">show</span>
+          <span *ngIf="showRace">hide</span>
         </button>
       </div>
-      <div>
-        {{charRace.raceName}}
-      </div>
-      <div>
-        {{charRace.abilityScoreBonuses[0].abilityScore|ability}}: {{charRace.abilityScoreBonuses[0].abilityScoreBonus}}
-      </div>
-      <div *ngIf="charRace.abilityScoreBonuses[1].abilityScoreBonus !== 0">
-        {{charRace.abilityScoreBonuses[1].abilityScore|ability}}: {{charRace.abilityScoreBonuses[1].abilityScoreBonus}}
-      </div>
-      <div>
-        {{charRace.action.actionName}}: {{charRace.action.actionContent}}
-      </div>
-      <div>
-        {{charRace.traits[0].traitName}}: {{charRace.traits[0].traitContent}}
-      </div>
-      <div>
-        {{charRace.traits[1].traitName}}: {{charRace.traits[1].traitContent}}
-      </div>
+    </div>
+    <div class="row" *ngIf="charRace&&showRace">
+      <dl>
+        <dt> Race Name: </dt>
+        <dd> {{charRace.raceName}} </dd>
+        <dt> Ability Bonuses: </dt>
+        <dd> {{charRace.abilityScoreBonuses[0].abilityScore|ability}}: {{charRace.abilityScoreBonuses[0].abilityScoreBonus}} </dd>
+        <dd *ngIf="charRace.abilityScoreBonuses[1].abilityScoreBonus !== 0">
+          {{charRace.abilityScoreBonuses[1].abilityScore|ability}}: {{charRace.abilityScoreBonuses[1].abilityScoreBonus}}
+        </dd>
+        <dt>Racial Action:</dt>
+        <dd>
+          {{charRace.action.actionName}}: {{charRace.action.actionContent}}
+        </dd>
+        <dt>Racial Traits</dt>
+        <dd>
+          {{charRace.traits[0].traitName}}: {{charRace.traits[0].traitContent}}
+        </dd>
+        <dd>
+          {{charRace.traits[1].traitName}}: {{charRace.traits[1].traitContent}}
+        </dd>
+      </dl>
     </div>
     <button type="submit" class="btn btn-success ">ÜRET!</button>
   </form>
@@ -71,7 +119,12 @@
   <div class="summary" *ngIf="submitted">
     <div class="row">
       <h4 class="col">
-        {{this.CharAbilities.toString()}}
+        {{this.character.strength}},
+        <br> {{this.character.dexterity}},
+        <br> {{this.character.constitution}},
+        <br> {{this.character.intelligence}},
+        <br> {{this.character.wisdom}},
+        <br> {{this.character.charisma}}
       </h4>
     </div>
   </div>

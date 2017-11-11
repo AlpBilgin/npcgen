@@ -5,11 +5,12 @@ import { CharClass, CharClassSummary } from '../model/class';
 import { ActionType, Action } from '../model/action';
 import { Dice } from '../model/dice';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../env';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ClassService {
-    baseURL = 'http://smubcizgiroman.com/api.php/CLASSES';
+    baseURL = environment.baseURL + '/CLASSES';
 
     // Bütün ırk tanımlarını saklayacak vektörü tanımla
     class: CharClass;
@@ -28,12 +29,12 @@ export class ClassService {
         // get only name and id columns
         return this.http.get(this.baseURL).toPromise().then(
             (resp: Response) => {
-                console.log(resp.json());
+                // console.log(resp);
                 for (const key in resp.json()) {
                     // Iterate list and collect names from object and push into array
                     this.classes.push(resp.json()[key]);
                 }
-                console.log(this.classes);
+                // console.log(this.classes);
                 return this.classes;
             }
         );
@@ -50,10 +51,11 @@ export class ClassService {
         // If race can't be found in cache; download, cache and return
         return this.http.get(this.baseURL + '?' + id).toPromise().then(
             (resp: Response) => {
-                console.log(resp.json());
+                // console.log(resp.json());
                 const raceDB = resp.json();
                 const newRace = new CharClass(raceDB);
                 this.classCache[id] = newRace;
+                // console.log(newRace)
                 return newRace;
             }
         );

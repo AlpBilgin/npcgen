@@ -20,7 +20,7 @@ export class CR {
         this.armorclassBonus = dbModel.AC_BONUS;
         this.abilityBonus = dbModel.ABILITY_BONUS;
         // TODO fix this when backend is finalised
-        this.damage = dbModel.DMG_DIE;
-        this.hitdiceCount = dbModel.HD_COUNT;
+        this.damage = dbModel.DDIE;
+        this.hitdiceCount = dbModel.DCOUNT;
     }
 }

@@ -11,7 +11,13 @@ export class AbilityScoreBonus {
             case 'int': return AbilityScores.int;
             case 'wis': return AbilityScores.wis;
             case 'cha': return AbilityScores.cha;
-            default: return AbilityScores.cha;
+            case '1': return AbilityScores.str;
+            case '2': return AbilityScores.dex;
+            case '3': return AbilityScores.con;
+            case '4': return AbilityScores.int;
+            case '5': return AbilityScores.wis;
+            case '6': return AbilityScores.cha;
+            default: return null;
         }
     }
 
