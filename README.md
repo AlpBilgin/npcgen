@@ -1,18 +1,17 @@
-npc üreteci
-##################################
+NPC GENERATOR [![Build Status](https://travis-ci.org/AlpBilgin/npcgen.svg?branch=dev)](https://travis-ci.org/AlpBilgin/npcgen)
 
-A Angular 4 based SPA.
+Angular based fat frontend
 
-# Prerequiremnts
+# Prerequisities
 
- * nodejs / npm >= 7
+ * Node, npm
 
 # Installation
 
   * npm install -g @angular/cli
   * npm install
 
-# Development
+# Development Server
 
  * ng serve
 
